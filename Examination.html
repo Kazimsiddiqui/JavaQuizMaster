@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Java Programming Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 12px #aaa;
+        }
+        .question {
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-bottom: 20px;
+        }
+        .submit-btn {
+            display: block;
+            margin: auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .correct-answer {
+            color: green;
+        }
+        .wrong-answer {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Java Programming Quiz</h2>
+        <form id="quiz-form">
+            <div class="question">
+                <p>1. What is the size of int data type in Java?</p>
+                <div class="options">
+                    <input type="radio" name="q1" value="A" id="q1a"> <label for="q1a">A) 8-bit</label><br>
+                    <input type="radio" name="q1" value="B" id="q1b"> <label for="q1b">B) 16-bit</label><br>
+                    <input type="radio" name="q1" value="C" id="q1c"> <label for="q1c">C) 32-bit</label><br>
+                    <input type="radio" name="q1" value="D" id="q1d"> <label for="q1d">D) 64-bit</label><br><br>
+                    <input type="button" name="check" value="Check" onclick="checkAnswer(1)">
+                </div>
+                <div id="result1" class="result"></div>
+            </div>
+            <div class="question">
+                <p>2. Which of the following is a valid declaration of a float variable in Java?</p>
+                <div class="options">
+                    <input type="radio" name="q2" value="A" id="q2a"> <label for="q2a">A) float f = 1.0;</label><br>
+                    <input type="radio" name="q2" value="B" id="q2b"> <label for="q2b">B) float f = 1F;</label><br>
+                    <input type="radio" name="q2" value="C" id="q2c"> <label for="q2c">C) float f = "1.0";</label><br>
+                    <input type="radio" name="q2" value="D" id="q2d"> <label for="q2d">D) float f = 1.0d;</label><br><br>
+                    <input type="button" name="check" value="Check" onclick="checkAnswer(2)">
+                </div>
+                <div id="result2" class="result"></div>
+            </div>
+            <div class="question">
+                <p>3. Which keyword is used for accessing the features of a package?</p>
+                <div class="options">
+                    <input type="radio" name="q3" value="A" id="q3a"> <label for="q3a">A) package</label><br>
+                    <input type="radio" name="q3" value="B" id="q3b"> <label for="q3b">B) import</label><br>
+                    <input type="radio" name="q3" value="C" id="q3c"> <label for="q3c">C) extends</label><br>
+                    <input type="radio" name="q3" value="D" id="q3d"> <label for="q3d">D) include</label><br><br>
+                    <input type="button" name="check" value="Check" onclick="checkAnswer(3)">
+                </div>
+                <div id="result3" class="result"></div>
+            </div>
+            <input type="submit" value="Submit" class="submit-btn">
+        </form>
+        <div id="summary" class="result"></div>
+    </div>
+
+    <script>
+        var answers = {
+            q1: 'C',
+            q2: 'B',
+            q3: 'B'
+        };
+
+        var descriptions = {
+            q1: 'The size of int data type in Java is 32-bit.',
+            q2: 'The valid declaration of a float variable in Java is "float f = 1F;". The "F" or "f" at the end indicates that it is a float literal.',
+            q3: 'The "import" keyword is used for accessing the features of a package in Java.'
+        };
+
+        var correctClicks = 0;
+        var wrongClicks = 0;
+
+        function checkAnswer(questionNumber) {
+            var resultDiv = document.getElementById('result' + questionNumber);
+            var correctAnswer = answers['q' + questionNumber];
+            var selectedOption = document.querySelector('input[name="q' + questionNumber + '"]:checked');
+            var labels = document.querySelectorAll('input[name="q' + questionNumber + '"] + label');
+
+            labels.forEach(function(label) {
+                label.classList.remove('correct-answer', 'wrong-answer');
+            });
+
+            if (selectedOption) {
+                if (selectedOption.value === correctAnswer) {
+                    selectedOption.nextElementSibling.classList.add('correct-answer');
+                    correctClicks++;
+                } else {
+                    selectedOption.nextElementSibling.classList.add('wrong-answer');
+                    wrongClicks++;
+                }
+            }
+            
+            document.querySelector('input[name="q' + questionNumber + '"][value="' + correctAnswer + '"] + label').classList.add('correct-answer');
+            resultDiv.innerHTML = 'Correct answer: ' + correctAnswer;
+            resultDiv.style.display = 'block';
+
+            updateSummary();
+        }
+
+        function updateSummary() {
+            var summaryDiv = document.getElementById('summary');
+            summaryDiv.innerHTML = 'Total correct clicks: ' + correctClicks + '<br>Total wrong clicks: ' + wrongClicks;
+            summaryDiv.style.display = 'block';
+        }
+
+        document.getElementById('quiz-form').onsubmit = function(event) {
+            event.preventDefault();
+            Object.keys(answers).forEach(function(question) {
+                var selectedOption = document.querySelector('input[name="' + question + '"]:checked');
+                var correctAnswer = answers[question];
+                var resultDiv = document.getElementById('result' + question.slice(1));
+
+                if (selectedOption) {
+                    if (selectedOption.value === correctAnswer) {
+                        resultDiv.className = 'result correct';
+                        resultDiv.textContent = 'Correct!';
+                    } else {
+                        resultDiv.className = 'result';
+                        resultDiv.textContent = 'Incorrect!';
+                    }
+                } else {
+                    resultDiv.className = 'result';
+                    resultDiv.textContent = 'The correct answer is ' + correctAnswer + '. Please select an answer to check.';
+                }
+
+                var description = descriptions[question];
+                var descriptionDiv = document.createElement('div');
+                descriptionDiv.className = 'description';
+                descriptionDiv.textContent = description;
+                resultDiv.appendChild(descriptionDiv);
+            });
+
+            updateSummary();
+        };
+    </script>
+</body>
+</html>
